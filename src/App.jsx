@@ -39,7 +39,6 @@ const App = () => {
         <Route path="/AboutPCOS" element={<AboutPCOS />} />
         <Route path="/UltrasoundImage" element={<UltrasoundImage />} />
 
-
       </Routes>
       <Footer />
 
