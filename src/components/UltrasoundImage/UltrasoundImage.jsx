@@ -4,6 +4,8 @@ import upload from '../../assets/uploadImg.png';
 const UltrasoundImage = () => {
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+  const [result, setResult] = useState('');
+  const [confidence, setConfidence] = useState(null);
   const hiddenFileInput = useRef(null);
 
   const handleImageChange = (event) => {
@@ -24,22 +26,17 @@ const UltrasoundImage = () => {
       return;
     }
 
-    const token = 'adhgsdaksdhk938742937423';
-    const myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${token}`);
-
     const formData = new FormData();
-    formData.append('file', image);
+    formData.append('image', image);
 
-    fetch('https://trickuweb.com/upload/profile_pic', {
+    fetch('http://127.0.0.1:5000/', { // Update to match backend URL
       method: 'POST',
-      headers: myHeaders,
       body: formData,
     })
       .then((response) => response.json())
-      .then((result) => {
-        alert('Image uploaded successfully!');
-        setImageUrl(result.img_url); // Replace with server URL
+      .then((data) => {
+        setResult(data.result);
+        setConfidence(data.confidence.toFixed(2));
       })
       .catch((error) => console.error('Upload failed:', error));
   };
@@ -87,8 +84,13 @@ const UltrasoundImage = () => {
             Upload Image
           </button>
         </div>
+        {result && (
+          <div className="mt-4">
+            <p className="text-xl font-semibold">Prediction: {result}</p>
+            <p className="text-lg">Confidence: {confidence}%</p>
+          </div>
+        )}
       </div>
-
     </div>
   );
 };
